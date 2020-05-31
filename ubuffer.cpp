@@ -987,6 +987,9 @@ void UBuffer::generate_bank_and_merge(CodegenOptions& options) {
     cout << "Receiver banks for " << inpt << endl;
     vector<stack_bank> mergeable;
     for (auto bnk : receivers) {
+for (int i = 0; i < bnk.read_delays.size(); i++){
+cout<<"bank read delay "<<bnk.read_delays[i]<<endl;
+}
       cout << tab(1) << bnk.name << ", # read offsets: " << bnk.read_delays.size() << endl;
       cout << tab(2) << "# receivers: " << receivers.size() << endl;
 
