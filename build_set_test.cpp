@@ -2469,7 +2469,7 @@ void aha_talk_print_info(prog& prg) {
   cout << "output code for application is in file: " << prg.name << ".cpp" << endl;
 }
 
-void conv_2d_bc_test() {
+prog conv_2d_bc_test() {
 
   prog prg;
   prg.compute_unit_file = "conv_3x3.h";
@@ -2490,21 +2490,34 @@ void conv_2d_bc_test() {
     auto pc = pr->add_loop("lc", 0, 64);
     auto rd = pc->add_op("read_0");
     // Need to load 9 values
+//std::vector<pair<buffer_name, std::vector<pair<std::string, std::string>>>> consume_locs_pair;
+   
+     std::vector<std::pair<std::string, std::string>> conditions;
     for (int i = 0; i < 3; i++) {
       for (int j = 0; j < 3; j++) {
-        string c = "min(lc + " + to_string(i) + ", 63)";
-        string r = "min(lr + " + to_string(j) + ", 63)";
-        rd->add_load("I", c + ", " + r);
+        std::pair <std::string, std::string> condc ("0 <= lc +" + to_string(i)+ " <= 63", "lc + " + to_string(i));
+        std::pair <std::string, std::string> condc2 ("lc + " + to_string(i)+ " > 63", "63");
+        std::pair <std::string, std::string> condr ("0 <= lr +" + to_string(j)+ " <= 63", "lr + " + to_string(j));
+        std::pair <std::string, std::string> condr2 ("lr + " + to_string(j)+ " > 63", "63");
+        conditions.push_back(condc);
+        conditions.push_back(condc2);
+	conditions.push_back(condr);
+        conditions.push_back(condr2);
+        rd->add_load("I",{{"0 <= lc +" + to_string(i)+ " <= 63", "lc + " + to_string(i)}, {"lc + " + to_string(i)+ " > 63", "63"}, {"0 <= lr +" + to_string(j)+ " <= 63", "lr + " + to_string(j)},{"lr + " + to_string(j)+ " > 63", "63"} });
+        //compute->add_load("M", {{"0 <= lc+1 < 63", "c"}, {"c+1 >= 9", "9"}});
+        //string c = "min(lc + " + to_string(i) + ", 63)";
+        //string r = "min(lr + " + to_string(j) + ", 63)";
+        //rd->add_load("I", c + ", " + r);
       }
     }
     rd->add_function("conv_3_3");
     rd->add_store("out", "lc, lr");
   }
+  return prg;
+ // cout << "Program code without optimization..." << endl;
+ // prg.unoptimized_codegen();
 
-  cout << "Program code without optimization..." << endl;
-  prg.unoptimized_codegen();
-
-  regression_test(prg);
+  //regression_test(prg);
 }
 
 void conv_1d_rolled_test() {
@@ -8844,6 +8857,11 @@ int main(int argc, char** argv) {
       return 0;
     }
 
+    if (cmd == "conv_2d_bc") {
+      prog prg = conv_2d_bc_test();
+      aha_talk_print_info(prg);
+      return 0;
+    }
     if (cmd == "conv_1d_bc") {
       prog prg = conv_1d_bc();
       aha_talk_print_info(prg);

@@ -867,6 +867,7 @@ struct prog {
       }
       m = unn(m, pmap);
     }
+cout<<" m "<<str(m)<<endl;
     return m;
   }
 
@@ -907,6 +908,7 @@ struct prog {
       }
       m = unn(m, pmap); 
     }
+cout<<" m  "<<str(m)<<endl;
     return m;
   }
 

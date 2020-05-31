@@ -66,7 +66,8 @@ umap* last_reads(const string& inpt, UBuffer& buf) {
 }
 
 isl_union_pw_qpolynomial* compute_dd(UBuffer& buf, const std::string& read_port, const std::string& write_port) {
-
+cout<<"read_port "<<read_port<<" write_port "<<write_port<<endl;
+cout<<"compute_dd====================================================="<<endl;
   isl_union_map* sched = buf.schedule.at(write_port);
   assert(sched != nullptr);
 
