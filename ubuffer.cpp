@@ -1328,8 +1328,10 @@ void UBuffer::generate_bank_and_merge(CodegenOptions& options) {
           //assert(receivers.size() == 1 || bnk.read_delays.size() == 2);
           assert(bnk.read_delays.size() == 2);
         }
+        cout << "bnk read delays size " << bnk.read_delays.size() << endl;
         if (bnk.read_delays.size() == 2) {
           assert(bnk.read_delays[0] == 0);
+          cout << bnk.read_delays [0] << " " << bnk.read_delays[1] << endl;
           mergeable.push_back(bnk);
         }
       }
