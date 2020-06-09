@@ -672,6 +672,8 @@ cout<<"DOMAIN "<<str(out_domain)<<endl;
     string value_str = "";
 cout<<"PEEK inpt "<< inpt<<endl;
 cout<<"output "<<outpt<<endl;
+cout<<"delay_expr "<<delay_expr<<endl;
+options.all_rams = 1;
     bool opt_const = is_optimizable_constant_dd(inpt, outpt, buf);
     if (options.inner_bank_offset_mode == INNER_BANK_OFFSET_LINEAR) {
       string linear_addr = buf.generate_linearize_ram_addr(outpt);
@@ -1367,7 +1369,7 @@ cout<<"access map in "<<str(access_map.at(inpt))<<" out "<<str(access_map.at(out
               access_map.insert(std::pair<std::string, umap*>(new_output, to_umap(to_map(m_))));
               schedule.insert(std::pair<std::string, isl_union_map*>(new_output, schedule.at(outpt)));
               //cout << "ACCESS MAP INSERT " << endl;
-	
+//add_in_port	
               stack_bank b_ = compute_bank_info(inpt, new_output);
               add_bank_between(inpt, outpt, b_);
               if (b_.read_delays.size() == 2) {
